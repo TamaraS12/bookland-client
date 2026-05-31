@@ -1,0 +1,115 @@
+<div class="books-container">
+
+  <!-- Header -->
+  <div class="header">
+    <h2>Books</h2>
+  </div>
+
+  <!-- Search -->
+  <div class="search-section">
+    <input
+      pInputText
+      type="text"
+      placeholder="Search by title"
+      [(ngModel)]="filters.title"
+      (input)="loadBooks()"
+      class="w-full">
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+
+    <p-select
+      [options]="sortOptions"
+      [(ngModel)]="filters.sort"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Sort"
+      (onChange)="handleSortChange()">
+    </p-select>
+
+    <p-select
+      [options]="authors"
+      [(ngModel)]="filters.authorId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Author"
+      (onChange)="loadBooks()">
+    </p-select>
+
+    <p-select
+      [options]="genres"
+      [(ngModel)]="filters.genreId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Genre"
+      (onChange)="loadBooks()">
+    </p-select>
+
+  </div>
+
+  <!-- Books Table -->
+  <p-table
+    [value]="books"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-striped">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Image</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Price</th>
+        <th style="width: 160px;">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-book>
+      <tr>
+
+        <td>
+          <img
+            [src]="apiBaseUrl + book.imageUrl"
+            [alt]="book.title"
+            width="50"
+            height="60">
+        </td>
+
+        <td>
+          {{ book.title }}
+        </td>
+
+        <td>
+          {{ book.authorName }}
+        </td>
+
+        <td>
+          <strong>{{ book.price }} RSD</strong>
+        </td>
+
+        <td>
+          <div class="actions">
+
+            <button
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-sm p-button-warning"
+              (click)="editBook(book)">
+            </button>
+
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-sm p-button-danger"
+              (click)="deleteBook(book.id)">
+            </button>
+
+          </div>
+        </td>
+
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+</div>
