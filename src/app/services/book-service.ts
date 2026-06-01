@@ -16,4 +16,11 @@ export class BookService {
   getById(id: number){
     return this.http.get<Book>(this.apiUrl + '/' + id);
   }
+  createBook(book: Book) {
+    return this.http.post<Book>(this.apiUrl, book);
+  }
+
+  updateBook(id: number, book: Book) {
+    return this.http.put<Book>(`${this.apiUrl}/${id}`, book);
+  }
 }

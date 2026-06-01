@@ -10,5 +10,17 @@ export const routes: Routes = [
   {
     path: 'books',
     component: BooksPage
+  },
+  {
+    path: 'books/new',
+    loadComponent: () =>
+      import('./pages/book-form/book-form')
+        .then(m => m.BookForm)
+  },
+  {
+    path: 'books/edit/:id',
+    loadComponent: () =>
+      import('./pages/book-form/book-form')
+        .then(m => m.BookForm)
   }
 ];

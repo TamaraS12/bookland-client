@@ -3,6 +3,12 @@
   <!-- Header -->
   <div class="header">
     <h2>Books</h2>
+
+    <p-button
+      label="Add Book"
+      icon="pi pi-plus"
+      (onClick)="addBook()">
+    </p-button>
   </div>
 
   <!-- Search -->
@@ -45,6 +51,13 @@
       placeholder="Genre"
       (onChange)="loadBooks()">
     </p-select>
+
+    <p-button
+      label="Reset"
+      icon="pi pi-filter-slash"
+      severity="secondary"
+      (onClick)="resetFilters()">
+    </p-button>
 
   </div>
 
@@ -94,7 +107,7 @@
               pButton
               icon="pi pi-pencil"
               class="p-button-sm p-button-warning"
-              (click)="editBook(book)">
+              (click)="editBook(book.id)">
             </button>
 
             <button

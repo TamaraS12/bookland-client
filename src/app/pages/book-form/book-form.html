@@ -1,0 +1,114 @@
+<div class="book-form-container">
+
+  <div class="form-header">
+    <h2>
+      {{ isEditMode ? 'Edit Book' : 'Add Book' }}
+    </h2>
+  </div>
+
+  <div class="form-grid">
+
+    <!-- Title -->
+    <div class="field">
+      <label for="title">Title</label>
+
+      <input
+        id="title"
+        pInputText
+        [(ngModel)]="book.title"
+        class="w-full">
+    </div>
+
+    <!-- Author -->
+    <div class="field">
+      <label for="author">Author</label>
+
+      <p-select
+        [options]="authors"
+        optionLabel="name"
+        optionValue="id"
+        [(ngModel)]="book.authorId"
+        placeholder="Select author">
+      </p-select>
+    </div>
+
+    <!-- Genres -->
+    <div class="field">
+      <label for="genres">Genres</label>
+
+      <p-multiselect
+        [options]="genres"
+        optionLabel="name"
+        optionValue="id"
+        [(ngModel)]="book.genreIds"
+        placeholder="Select genres"
+        display="chip">
+      </p-multiselect>
+    </div>
+
+    <!-- Price -->
+    <div class="field">
+      <label for="price">Price (RSD)</label>
+
+      <p-inputNumber
+        [(ngModel)]="book.price"
+        mode="decimal"
+        [min]="0">
+      </p-inputNumber>
+    </div>
+
+    <!-- Image -->
+    <div class="field field-full">
+      <label for="imageUrl">Image URL</label>
+
+      <input
+        id="imageUrl"
+        pInputText
+        [(ngModel)]="book.imageUrl"
+        class="w-full">
+    </div>
+
+    <!-- Preview -->
+    @if (book.imageUrl) {
+      <div class="field field-full">
+        <label>Image Preview</label>
+
+        <img
+          [src]="apiBaseUrl + book.imageUrl"
+          alt="Book image"
+          class="preview-image">
+      </div>
+    }
+
+    <!-- Description -->
+    <div class="field field-full">
+      <label for="description">Description</label>
+
+      <textarea
+        pTextarea
+        rows="6"
+        [(ngModel)]="book.description"
+        class="w-full">
+      </textarea>
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+
+    <p-button
+      label="Save"
+      icon="pi pi-save"
+      (onClick)="save()">
+    </p-button>
+
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      severity="secondary"
+      (onClick)="cancel()">
+    </p-button>
+
+  </div>
+
+</div>

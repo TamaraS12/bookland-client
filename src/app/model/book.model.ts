@@ -4,6 +4,8 @@ export interface Book {
   price: number;
   description: string;
   imageUrl: string;
-  authorName: string;
-  genres: string[];
+  authorName?: string;
+  authorId?: number;
+  genres?: string[];
+  genreIds?: number[];
 }

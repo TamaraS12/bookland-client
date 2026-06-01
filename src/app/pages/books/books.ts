@@ -17,7 +17,7 @@ import { BookFilterParams } from '../../model/book-filter-params.model';
 import { BookService } from '../../services/book-service';
 import { AuthorService } from '../../services/author-service';
 import { GenreService } from '../../services/genre-service';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,7 +33,6 @@ import { RouterLink } from '@angular/router';
     InputTextModule,
     ButtonModule,
     BadgeModule,
-    RouterLink,
   ],
 })
 export class BooksPage implements OnInit {
@@ -65,6 +64,7 @@ export class BooksPage implements OnInit {
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadAuthors();
@@ -109,8 +109,12 @@ export class BooksPage implements OnInit {
     this.loadBooks();
   }
 
-  editBook(book: any) {
-    console.log('Edit book:', book);
+  addBook(): void {
+    this.router.navigate(['/books/new']);
+  }
+
+  editBook(id: number): void {
+    this.router.navigate(['/books/edit', id]);
   }
 
   deleteBook(id: number) {
@@ -119,5 +123,16 @@ export class BooksPage implements OnInit {
     // this.bookService.deleteBook(id).subscribe(() => {
     //   this.loadBooks(); // refresh tabele
     // });
+  }
+
+  resetFilters(): void {
+    this.filters = {
+      authorId: null,
+      genreId: null,
+      title: null,
+      sort: 'price,asc'
+    };
+
+    this.loadBooks();
   }
 }
