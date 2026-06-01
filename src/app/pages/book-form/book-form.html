@@ -6,7 +6,7 @@
     </h2>
   </div>
 
-  <div class="form-grid">
+  <div class="form-grid" [formGroup]="form">
 
     <!-- Title -->
     <div class="field">
@@ -15,32 +15,32 @@
       <input
         id="title"
         pInputText
-        [(ngModel)]="book.title"
+        formControlName="title"
         class="w-full">
     </div>
 
     <!-- Author -->
     <div class="field">
-      <label for="author">Author</label>
+      <label>Author</label>
 
       <p-select
-        [options]="authors"
+        [options]="authors()"
         optionLabel="name"
         optionValue="id"
-        [(ngModel)]="book.authorId"
+        formControlName="authorId"
         placeholder="Select author">
       </p-select>
     </div>
 
     <!-- Genres -->
     <div class="field">
-      <label for="genres">Genres</label>
+      <label>Genres</label>
 
       <p-multiselect
-        [options]="genres"
+        [options]="genres()"
         optionLabel="name"
         optionValue="id"
-        [(ngModel)]="book.genreIds"
+        formControlName="genreIds"
         placeholder="Select genres"
         display="chip">
       </p-multiselect>
@@ -48,10 +48,10 @@
 
     <!-- Price -->
     <div class="field">
-      <label for="price">Price (RSD)</label>
+      <label>Price (RSD)</label>
 
       <p-inputNumber
-        [(ngModel)]="book.price"
+        formControlName="price"
         mode="decimal"
         [min]="0">
       </p-inputNumber>
@@ -64,30 +64,30 @@
       <input
         id="imageUrl"
         pInputText
-        [(ngModel)]="book.imageUrl"
+        formControlName="imageUrl"
         class="w-full">
     </div>
 
-    <!-- Preview -->
-    @if (book.imageUrl) {
-      <div class="field field-full">
-        <label>Image Preview</label>
+<!--    &lt;!&ndash; Preview &ndash;&gt;-->
+<!--    @if (book.imageUrl) {-->
+<!--      <div class="field field-full">-->
+<!--        <label>Image Preview</label>-->
 
-        <img
-          [src]="apiBaseUrl + book.imageUrl"
-          alt="Book image"
-          class="preview-image">
-      </div>
-    }
+<!--        <img-->
+<!--          [src]="apiBaseUrl + book.imageUrl"-->
+<!--          alt="Book image"-->
+<!--          class="preview-image">-->
+<!--      </div>-->
+<!--    }-->
 
     <!-- Description -->
     <div class="field field-full">
-      <label for="description">Description</label>
+      <label>Description</label>
 
       <textarea
         pTextarea
         rows="6"
-        [(ngModel)]="book.description"
+        formControlName="description"
         class="w-full">
       </textarea>
     </div>

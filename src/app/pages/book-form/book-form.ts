@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { inject } from '@angular/core';
 import { Book } from '../../model/book.model';
 import { BookService } from '../../services/book-service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -13,10 +13,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TextareaModule } from 'primeng/textarea';
 import { Router } from '@angular/router';
 
-import { Author } from '../../model/author.model';
-import { Genre } from '../../model/genre.model';
 import { AuthorService } from '../../services/author-service';
 import { GenreService } from '../../services/genre-service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-book-form',
@@ -31,69 +30,69 @@ import { GenreService } from '../../services/genre-service';
     SelectModule,
     MultiSelectModule,
     ButtonModule,
+    ReactiveFormsModule,
   ],
 })
 export class BookForm implements OnInit {
   apiBaseUrl = 'http://localhost:8080';
 
-  authors: Author[] = [];
-  genres: Genre[] = [];
-  book: Book = {
-    id: 0,
-    title: '',
-    description: '',
-    price: 0,
-    imageUrl: '',
-  };
-
   isEditMode = false;
-  bookId?: number;
+  book: Book | undefined;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private bookService = inject(BookService);
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
-  private cdr = inject(ChangeDetectorRef);
+  private formBuilder = inject(FormBuilder);
+
+  form = this.formBuilder.group<Book>({
+    title: '',
+    description: '',
+    price: 0,
+    imageUrl: null,
+    authorId: null,
+    genreIds: []
+  });
+
+  authors = toSignal(this.authorService.getAllAuthors(), { initialValue: [] });
+
+  genres = toSignal(this.genreService.getAllGenres(), { initialValue: [] });
 
   ngOnInit(): void {
-    this.loadAuthors();
-    this.loadGenres();
-
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
       this.isEditMode = true;
-      this.bookId = Number(id);
+      const bookId = Number(id);
 
-      this.loadBook(this.bookId);
+      this.loadBook(bookId);
     }
   }
 
   loadBook(id: number): void {
     this.bookService.getById(id).subscribe((res) => {
       this.book = res;
+      this.form.patchValue(this.book);
     });
-  }
-
-  loadAuthors(): void {
-    this.authorService.getAllAuthors().subscribe(res => {
-      this.authors = res;
-      this.cdr.detectChanges();
-    });
-  }
-
-  loadGenres(): void {
-    this.genreService.getAllGenres().subscribe((res) => (this.genres = res));
   }
 
   save(): void {
+    console.log(this.form.getRawValue());
+
     if (this.isEditMode) {
-      this.bookService.updateBook(this.bookId!, this.book).subscribe(() => {
-        this.router.navigate(['/books']);
-      });
+      const updatedBook: Book = {
+        ...this.form.getRawValue() as Book,
+        id: this.book?.id
+      }
+      if (this.book?.id) {
+        this.bookService.updateBook(this.book.id, updatedBook).subscribe(() => {
+          this.router.navigate(['/books']);
+        });
+      }
     } else {
-      this.bookService.createBook(this.book).subscribe(() => {
+      const newBook = this.form.getRawValue() as Book;
+      this.bookService.createBook(newBook).subscribe(() => {
         this.router.navigate(['/books']);
       });
     }

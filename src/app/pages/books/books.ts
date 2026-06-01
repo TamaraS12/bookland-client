@@ -118,11 +118,9 @@ export class BooksPage implements OnInit {
   }
 
   deleteBook(id: number) {
-    console.log('Delete book:', id);
-
-    // this.bookService.deleteBook(id).subscribe(() => {
-    //   this.loadBooks(); // refresh tabele
-    // });
+    this.bookService.deleteBook(id).subscribe(() => {
+      this.loadBooks(); // refresh tabele
+    });
   }
 
   resetFilters(): void {
@@ -130,7 +128,7 @@ export class BooksPage implements OnInit {
       authorId: null,
       genreId: null,
       title: null,
-      sort: 'price,asc'
+      sort: 'price,asc',
     };
 
     this.loadBooks();
