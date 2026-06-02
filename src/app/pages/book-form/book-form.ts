@@ -16,11 +16,15 @@ import { Router } from '@angular/router';
 import { AuthorService } from '../../services/author-service';
 import { GenreService } from '../../services/genre-service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 @Component({
   selector: 'app-book-form',
   templateUrl: './book-form.html',
   styleUrl: './book-form.css',
+  providers: [MessageService],
   imports: [
     CommonModule,
     FormsModule,
@@ -31,6 +35,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     MultiSelectModule,
     ButtonModule,
     ReactiveFormsModule,
+    ToastModule,
+
   ],
 })
 export class BookForm implements OnInit {
@@ -45,6 +51,8 @@ export class BookForm implements OnInit {
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
   private formBuilder = inject(FormBuilder);
+  private messageService = inject(MessageService);
+
 
   form = this.formBuilder.group<Book>({
     title: '',
@@ -87,12 +95,22 @@ export class BookForm implements OnInit {
       }
       if (this.book?.id) {
         this.bookService.updateBook(this.book.id, updatedBook).subscribe(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Book updated successfully.',
+          });
           this.router.navigate(['/books']);
         });
       }
     } else {
       const newBook = this.form.getRawValue() as Book;
       this.bookService.createBook(newBook).subscribe(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Book added successfully.',
+        });
         this.router.navigate(['/books']);
       });
     }

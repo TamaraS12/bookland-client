@@ -1,0 +1,27 @@
+<div class="dialog-content" [formGroup]="form">
+
+  <div class="field">
+    <label for="name">Genre name</label>
+
+    <input
+      id="name"
+      pInputText
+      formControlName="name"
+      class="w-full">
+  </div>
+
+  <div class="actions">
+    <p-button
+      label="Cancel"
+      severity="secondary"
+      (click)="cancel()">
+    </p-button>
+
+    <p-button
+      label="Save"
+      (click)="save()">
+    </p-button>
+  </div>
+
+</div>
+

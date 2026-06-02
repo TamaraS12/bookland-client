@@ -18,6 +18,10 @@ import { BookService } from '../../services/book-service';
 import { AuthorService } from '../../services/author-service';
 import { GenreService } from '../../services/genre-service';
 import { Router } from '@angular/router';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService  } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+
 
 
 @Component({
@@ -25,6 +29,8 @@ import { Router } from '@angular/router';
   standalone: true,
   templateUrl: './books.html',
   styleUrls: ['./books.css'],
+  providers: [ConfirmationService, MessageService],
+
   imports: [
     CommonModule,
     FormsModule,
@@ -33,6 +39,9 @@ import { Router } from '@angular/router';
     InputTextModule,
     ButtonModule,
     BadgeModule,
+    ConfirmDialogModule,
+    ToastModule,
+
   ],
 })
 export class BooksPage implements OnInit {
@@ -65,6 +74,8 @@ export class BooksPage implements OnInit {
   private genreService = inject(GenreService);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
 
   ngOnInit(): void {
     this.loadAuthors();
@@ -118,8 +129,30 @@ export class BooksPage implements OnInit {
   }
 
   deleteBook(id: number) {
-    this.bookService.deleteBook(id).subscribe(() => {
-      this.loadBooks(); // refresh tabele
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Danger Zone',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.bookService.deleteBook(id).subscribe(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Book deleted successfully.',
+          });
+          this.loadBooks();
+        });
+      },
     });
   }
 
