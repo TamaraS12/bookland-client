@@ -1,0 +1,41 @@
+.card {
+  padding: 1.5rem;
+}
+
+.cart-image {
+  width: 70px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.cart-summary {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.total span {
+  margin-left: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.empty-cart {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  color: var(--text-color-secondary);
+}

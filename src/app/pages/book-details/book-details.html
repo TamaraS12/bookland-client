@@ -1,1 +1,53 @@
-<p>book-details works!</p>
+<p-card>
+  <div class="grid">
+    <div class="col-12 md:col-4 flex justify-content-center">
+      <img
+        [src]="apiBaseUrl + book()?.imageName"
+        [alt]="book()?.title"
+        class="book-image"
+      />
+    </div>
+
+    <div class="col-12 md:col-8">
+      <div class="details-container">
+        <h1 class="m-0 text-3xl font-medium">{{ book()?.title }}</h1>
+
+        <h3 class="m-0 text-color-secondary text-2xl">
+          {{ book()?.authorName }}
+        </h3>
+
+        <p class="m-0 line-height-3">
+          {{ book()?.description }}
+        </p>
+
+        <div class="purchase-section">
+          <div class="text-2xl font-bold text-primary">
+            {{ book()?.price | number:'1.2-2' }} RSD
+          </div>
+
+          <div class="quantity-section" [formGroup]="form">
+            <label>Quantity</label>
+
+            <p-inputNumber
+              inputId="quantity"
+              formControlName="quantity"
+              [min]="1"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              incrementButtonIcon="pi pi-plus"
+              decrementButtonIcon="pi pi-minus">
+            </p-inputNumber>
+          </div>
+        </div>
+
+        <div class="button-container">
+          <p-button
+            [disabled]="form.invalid"
+            label="Add to cart"
+            icon="pi pi-shopping-cart" (click)="handleCartItemClicked()">
+          </p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>

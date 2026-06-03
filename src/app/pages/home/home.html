@@ -4,10 +4,10 @@
   </div>
 
   <div class="right">
-    <p-button
-      label="Cart"
-      icon="pi pi-shopping-cart">
-    </p-button>
+
+    <p-overlaybadge [value]="cartSize()" badgeSize="small" (click)="handleViewCart()">
+      <i class="pi pi-shopping-cart" style="font-size: 1.5rem; cursor: pointer;"></i>
+    </p-overlaybadge>
   </div>
 </header>
 

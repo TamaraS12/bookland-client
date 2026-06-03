@@ -8,6 +8,8 @@ import { Shop } from './pages/shop/shop';
 import { authGuard } from './guard/auth-guard';
 import { BookForm } from './pages/book-form/book-form';
 import { Register } from './pages/register/register';
+import { BookDetails } from './pages/book-details/book-details';
+import { Cart } from './pages/cart/cart';
 
 export const routes: Routes = [
   {
@@ -55,6 +57,16 @@ export const routes: Routes = [
       {
         path: 'shop',
         component: Shop,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'shop/:bookId',
+        component: BookDetails,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'cart',
+        component: Cart,
         canActivate: [authGuard],
       },
     ],

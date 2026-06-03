@@ -13,6 +13,8 @@ import { Button } from 'primeng/button';
 import { BookSearchResponse } from '../../model/book-search-response.model';
 import { InputText } from 'primeng/inputtext';
 import { Select, SelectChangeEvent } from 'primeng/select';
+import { Book } from '../../model/book.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-shop',
@@ -52,6 +54,7 @@ export class Shop implements OnInit {
   private bookService = inject(BookService);
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
+  private router= inject(Router);
 
   ngOnInit(): void {
     this.loadAuthors();
@@ -96,5 +99,10 @@ export class Shop implements OnInit {
       size: $event.rows,
     };
     this.loadBooks();
+  }
+
+  handleBookDetails(book: Book) {
+    this.router.navigate(['shop', book.id]);
+
   }
 }

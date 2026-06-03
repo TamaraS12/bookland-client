@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
-import { Button } from 'primeng/button';
+import { Component, inject } from '@angular/core';
 import { Menu } from 'primeng/menu';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-home',
-  imports: [Button, Menu, RouterOutlet],
+  imports: [Menu, RouterOutlet, OverlayBadgeModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home {
+  private cartService = inject(CartService);
+  private router = inject(Router);
+
+  cartSize = this.cartService.cartSize;
+
   items: MenuItem[] = [
     {
       label: 'Books',
@@ -28,4 +34,8 @@ export class Home {
       routerLink: ['/genres'],
     },
   ];
+
+  handleViewCart() {
+    this.router.navigate(['cart']);
+  }
 }
