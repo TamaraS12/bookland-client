@@ -10,6 +10,7 @@ import { BookForm } from './pages/book-form/book-form';
 import { Register } from './pages/register/register';
 import { BookDetails } from './pages/book-details/book-details';
 import { Cart } from './pages/cart/cart';
+import { OrderForm } from './pages/order-form/order-form';
 
 export const routes: Routes = [
   {
@@ -67,6 +68,11 @@ export const routes: Routes = [
       {
         path: 'cart',
         component: Cart,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'orders/new',
+        component: OrderForm,
         canActivate: [authGuard],
       },
     ],

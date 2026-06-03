@@ -6,6 +6,7 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './interceptor/auth-interceptor';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +25,6 @@ export const appConfig: ApplicationConfig = {
       useClass: AuthInterceptor,
       multi: true
     },
+    MessageService
   ]
 };

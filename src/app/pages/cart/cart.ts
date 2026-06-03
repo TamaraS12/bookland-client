@@ -6,39 +6,77 @@ import { IMAGE_URL } from '../../constants/image.constants';
 import { TableModule } from 'primeng/table';
 import { DecimalPipe } from '@angular/common';
 import { Button } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-cart',
-  imports: [TableModule, DecimalPipe, Button],
+  imports: [TableModule, DecimalPipe, Button, ConfirmDialogModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
+  providers: [ConfirmationService]
 })
 export class Cart {
   apiBaseUrl = IMAGE_URL;
   private cartService = inject(CartService);
   private router = inject(Router);
+  private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
 
   cart = this.cartService.cart;
 
   totalAmount = computed(() => this.cart().totalAmount);
 
-  constructor() {}
-
-  ngOnInit() {}
-
-  handleEdit(item: CartItem) {
-    this.router.navigate(['books', item.book.id, 'cart', 'items', item.id]);
-  }
-
   handleDelete(item: CartItem) {
-    this.cartService.deleteCartItem(item);
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Danger Zone',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.cartService.deleteCartItem(item);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Cart item deleted successfully.',
+        });
+      },
+    });
+
   }
 
   handleOrder() {
-    this.router.navigate(['order']);
+    this.router.navigate(['orders', 'new']);
   }
 
   clearCart() {
-    this.cartService.resetCart();
+    this.confirmationService.confirm({
+      message: 'Do you want to clear this cart?',
+      header: 'Danger Zone',
+      icon: 'pi pi-info-circle',
+      rejectLabel: 'Cancel',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.cartService.resetCart();
+      },
+    });
+
   }
 }

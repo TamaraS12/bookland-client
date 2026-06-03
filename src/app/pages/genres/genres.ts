@@ -1,9 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Avatar } from 'primeng/avatar';
 import { Button } from 'primeng/button';
 import { Card } from 'primeng/card';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { Toast } from 'primeng/toast';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { GenreService } from '../../services/genre-service';
@@ -12,12 +11,12 @@ import { GenreForm } from '../genre-form/genre-form';
 
 @Component({
   selector: 'app-genres',
-  imports: [Avatar, Button, Card, ConfirmDialog, Toast],
+  imports: [Avatar, Button, Card, ConfirmDialog],
   templateUrl: './genres.html',
   styleUrl: './genres.css',
-  providers: [DialogService, ConfirmationService, MessageService],
+  providers: [DialogService, ConfirmationService],
 })
-export class Genres {
+export class Genres implements OnInit {
   private genreService = inject(GenreService);
   private dialogService = inject(DialogService);
   private confirmationService = inject(ConfirmationService);

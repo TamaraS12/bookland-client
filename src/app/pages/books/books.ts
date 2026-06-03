@@ -18,7 +18,6 @@ import { GenreService } from '../../services/genre-service';
 import { Router } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { IMAGE_URL } from '../../constants/image.constants';
 import { BookSearchResponse } from '../../model/book-search-response.model';
 
@@ -27,7 +26,7 @@ import { BookSearchResponse } from '../../model/book-search-response.model';
   standalone: true,
   templateUrl: './books.html',
   styleUrls: ['./books.css'],
-  providers: [ConfirmationService, MessageService],
+  providers: [ConfirmationService],
 
   imports: [
     CommonModule,
@@ -38,7 +37,6 @@ import { BookSearchResponse } from '../../model/book-search-response.model';
     ButtonModule,
     BadgeModule,
     ConfirmDialogModule,
-    ToastModule,
   ],
 })
 export class BooksPage implements OnInit {

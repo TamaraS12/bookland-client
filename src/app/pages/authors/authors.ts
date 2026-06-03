@@ -9,14 +9,13 @@ import { Author } from '../../model/author.model';
 import { AuthorForm } from '../author-form/author-form';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-authors',
-  imports: [CommonModule, CardModule, AvatarModule, ButtonModule, ConfirmDialogModule, ToastModule],
+  imports: [CommonModule, CardModule, AvatarModule, ButtonModule, ConfirmDialogModule],
   templateUrl: './authors.html',
   styleUrl: './authors.css',
-  providers: [DialogService, ConfirmationService, MessageService],
+  providers: [DialogService, ConfirmationService],
 })
 export class Authors implements OnInit {
   private authorService = inject(AuthorService);

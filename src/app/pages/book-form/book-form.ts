@@ -26,7 +26,6 @@ import { IMAGE_URL } from '../../constants/image.constants';
   selector: 'app-book-form',
   templateUrl: './book-form.html',
   styleUrl: './book-form.css',
-  providers: [MessageService],
   imports: [
     CommonModule,
     FormsModule,

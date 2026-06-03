@@ -4,11 +4,10 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { InputText } from 'primeng/inputtext';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ConfirmDialog } from 'primeng/confirmdialog';
-import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-genre-form',
-  imports: [Button, FormsModule, InputText, ReactiveFormsModule, ConfirmDialog, Toast],
+  imports: [Button, FormsModule, InputText, ReactiveFormsModule, ConfirmDialog],
   templateUrl: './genre-form.html',
   styleUrl: './genre-form.css',
 })

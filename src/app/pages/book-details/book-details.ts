@@ -10,6 +10,7 @@ import { Button } from 'primeng/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CartItem } from '../../model/cart.model';
 import { CartService } from '../../services/cart-service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-book-details',
@@ -25,6 +26,7 @@ export class BookDetails implements OnInit {
   private formBuilder = inject(FormBuilder);
   private cartService = inject(CartService);
   private router = inject(Router);
+  private messageService = inject(MessageService);
 
   book = signal<Book | null>(null);
   cartSize = this.cartService.cartSize;
@@ -32,8 +34,6 @@ export class BookDetails implements OnInit {
   form = this.formBuilder.group({
     quantity: [0, [Validators.required, Validators.min(1)]],
   });
-
-  cartItem: CartItem | undefined;
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('bookId');
@@ -44,16 +44,8 @@ export class BookDetails implements OnInit {
     }
   }
 
-  handleCartItemClicked() {
-    if (this.cartItem) {
-      this.editCartItem();
-    } else {
-      this.addCartItem();
-    }
-  }
-
-  private addCartItem(): void {
-    if (this.book) {
+  handleAddCartItem(): void {
+    if (this.book()) {
       const quantity: number = this.form.get('quantity')?.value as number;
       const cartItem: CartItem = {
         id: this.cartSize() + 1,
@@ -62,19 +54,11 @@ export class BookDetails implements OnInit {
         amount: this.book()?.price! * quantity,
       };
       this.cartService.addCartItem(cartItem);
-      this.router.navigate(['cart']);
-    }
-  }
-
-  private editCartItem() {
-    if (this.book && this.cartItem) {
-      const quantity: number = this.form.get('quantity')?.value as number;
-      const updatedCartItem: CartItem = {
-        ...this.cartItem,
-        quantity: quantity,
-        amount: this.book()?.price! * quantity,
-      };
-      this.cartService.updateCartItem(updatedCartItem);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Cart item added successfully.',
+      });
       this.router.navigate(['cart']);
     }
   }
