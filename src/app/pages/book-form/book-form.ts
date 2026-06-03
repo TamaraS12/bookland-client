@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { inject } from '@angular/core';
 import { Book } from '../../model/book.model';
@@ -18,6 +18,8 @@ import { GenreService } from '../../services/genre-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { FileUpload } from 'primeng/fileupload';
+import { IMAGE_URL } from '../../constants/image.constants';
 
 
 @Component({
@@ -36,11 +38,11 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     ReactiveFormsModule,
     ToastModule,
-
+    FileUpload,
   ],
 })
 export class BookForm implements OnInit {
-  apiBaseUrl = 'http://localhost:8080';
+  apiBaseUrl = IMAGE_URL;
 
   isEditMode = false;
   book: Book | undefined;
@@ -53,15 +55,16 @@ export class BookForm implements OnInit {
   private formBuilder = inject(FormBuilder);
   private messageService = inject(MessageService);
 
-
   form = this.formBuilder.group<Book>({
     title: '',
     description: '',
     price: 0,
-    imageUrl: null,
     authorId: null,
-    genreIds: []
+    genreIds: [],
   });
+
+  selectedFile: File | null = null;
+  imagePreview = signal<string | null>(null);
 
   authors = toSignal(this.authorService.getAllAuthors(), { initialValue: [] });
 
@@ -82,41 +85,85 @@ export class BookForm implements OnInit {
     this.bookService.getById(id).subscribe((res) => {
       this.book = res;
       this.form.patchValue(this.book);
+
+      this.imagePreview.set(this.apiBaseUrl + this.book.imageName);
     });
   }
 
   save(): void {
-    console.log(this.form.getRawValue());
-
     if (this.isEditMode) {
-      const updatedBook: Book = {
-        ...this.form.getRawValue() as Book,
-        id: this.book?.id
-      }
-      if (this.book?.id) {
-        this.bookService.updateBook(this.book.id, updatedBook).subscribe(() => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Book updated successfully.',
-          });
-          this.router.navigate(['/books']);
-        });
-      }
+      this.updateBook();
     } else {
-      const newBook = this.form.getRawValue() as Book;
-      this.bookService.createBook(newBook).subscribe(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Book added successfully.',
-        });
-        this.router.navigate(['/books']);
-      });
+      this.addBook();
     }
   }
 
   cancel(): void {
     this.router.navigate(['/books']);
+  }
+
+  onFileSelect(event: any): void {
+    this.selectedFile = event.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.imagePreview.set(reader.result as string);
+    };
+
+    if (this.selectedFile) {
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  private addBook() {
+    const formData = new FormData();
+
+    formData.append(
+      'book',
+      new Blob([JSON.stringify(this.form.getRawValue())], { type: 'application/json' }),
+    );
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+    this.bookService.createBook(formData).subscribe(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Book added successfully.',
+      });
+      this.router.navigate(['/books']);
+    });
+  }
+
+  private updateBook() {
+    const updatedBook: Book = {
+      ...(this.form.getRawValue() as Book),
+      id: this.book?.id,
+    };
+    const formData = new FormData();
+
+    formData.append(
+      'book',
+      new Blob(
+        [JSON.stringify(updatedBook)],
+        { type: 'application/json' }),
+    );
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+
+    if (this.book?.id) {
+      this.bookService.updateBook(this.book.id, formData).subscribe(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Book updated successfully.',
+        });
+        this.router.navigate(['/books']);
+      });
+    }
   }
 }

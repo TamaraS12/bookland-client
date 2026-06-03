@@ -1,3 +1,5 @@
+<p-toast />
+
 <div class="book-form-container">
 
   <div class="form-header">
@@ -59,26 +61,27 @@
 
     <!-- Image -->
     <div class="field field-full">
-      <label for="imageUrl">Image URL</label>
-
-      <input
-        id="imageUrl"
-        pInputText
-        formControlName="imageUrl"
-        class="w-full">
+      <p-fileupload
+        mode="basic"
+        chooseLabel="Choose Image"
+        accept="image/*"
+        [auto]="false"
+        [customUpload]="true"
+        (onSelect)="onFileSelect($event)">
+      </p-fileupload>
     </div>
 
-<!--    &lt;!&ndash; Preview &ndash;&gt;-->
-<!--    @if (book.imageUrl) {-->
-<!--      <div class="field field-full">-->
-<!--        <label>Image Preview</label>-->
-
-<!--        <img-->
-<!--          [src]="apiBaseUrl + book.imageUrl"-->
-<!--          alt="Book image"-->
-<!--          class="preview-image">-->
-<!--      </div>-->
-<!--    }-->
+    <!-- Preview -->
+    @if (imagePreview()) {
+      <div class="field field-full">
+        <img
+          [src]="imagePreview()"
+          alt="Book image"
+          height="180"
+          width="120"
+          class="preview-image">
+      </div>
+    }
 
     <!-- Description -->
     <div class="field field-full">

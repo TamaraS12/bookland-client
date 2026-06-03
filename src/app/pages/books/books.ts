@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService  } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { IMAGE_URL } from '../../constants/image.constants';
 
 
 
@@ -45,7 +46,7 @@ import { ToastModule } from 'primeng/toast';
   ],
 })
 export class BooksPage implements OnInit {
-  apiBaseUrl = 'http://localhost:8080';
+  apiBaseUrl = IMAGE_URL;
 
   books: Book[] = [];
   authors: Author[] = [];
