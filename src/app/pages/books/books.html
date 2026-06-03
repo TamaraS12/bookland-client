@@ -30,11 +30,10 @@
 
     <p-select
       [options]="sortOptions"
-      [(ngModel)]="filters.sort"
       optionLabel="label"
       optionValue="value"
       placeholder="Sort"
-      (onChange)="handleSortChange()">
+      (onChange)="handleSortChange($event)">
     </p-select>
 
     <p-select
@@ -66,7 +65,13 @@
 
   <!-- Books Table -->
   <p-table
-    [value]="books"
+    [value]="bookSearchResponse().content"
+    [paginator]="true"
+    [lazy]="true"
+    [rows]="bookSearchResponse().size"
+    [totalRecords]="bookSearchResponse().totalElements"
+    (onLazyLoad)="handleLoad($event)"
+
     responsiveLayout="scroll"
     styleClass="p-datatable-striped">
 

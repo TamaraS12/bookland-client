@@ -1,29 +1,26 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ChangeDetectorRef} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { TableModule } from 'primeng/table';
-import { SelectModule } from 'primeng/select';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 
-import { Book } from '../../model/book.model';
 import { Author } from '../../model/author.model';
 import { Genre } from '../../model/genre.model';
-import { BookFilterParams } from '../../model/book-filter-params.model';
+import { BookSearchRequest } from '../../model/book-search-request.model';
 
 import { BookService } from '../../services/book-service';
 import { AuthorService } from '../../services/author-service';
 import { GenreService } from '../../services/genre-service';
 import { Router } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService  } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { IMAGE_URL } from '../../constants/image.constants';
-
-
+import { BookSearchResponse } from '../../model/book-search-response.model';
 
 @Component({
   selector: 'app-books',
@@ -42,20 +39,23 @@ import { IMAGE_URL } from '../../constants/image.constants';
     BadgeModule,
     ConfirmDialogModule,
     ToastModule,
-
   ],
 })
 export class BooksPage implements OnInit {
   apiBaseUrl = IMAGE_URL;
 
-  books: Book[] = [];
+  bookSearchResponse = signal<BookSearchResponse>({
+    content: [],
+    page: 0,
+    size: 8,
+    totalElements: 0,
+  });
   authors: Author[] = [];
   genres: Genre[] = [];
 
-  filters: any = {
-    authorId: null,
-    genreId: null,
-    title: null,
+  filters: BookSearchRequest = {
+    page: 0,
+    size: 8,
     sort: 'price,asc',
   };
 
@@ -73,7 +73,6 @@ export class BooksPage implements OnInit {
   private bookService = inject(BookService);
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
-  private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
@@ -85,27 +84,8 @@ export class BooksPage implements OnInit {
   }
 
   loadBooks(): void {
-    const params: BookFilterParams = {};
-
-    if (this.filters.title) {
-      params.title = this.filters.title;
-    }
-
-    if (this.filters.authorId) {
-      params.authorId = this.filters.authorId;
-    }
-
-    if (this.filters.genreId) {
-      params.genreId = this.filters.genreId;
-    }
-
-    if (this.filters.sort) {
-      params.sort = this.filters.sort;
-    }
-
-    this.bookService.searchBooks(params).subscribe(res => {
-      this.books = res;
-      this.cdr.detectChanges();
+    this.bookService.searchBooks(this.filters).subscribe((res) => {
+      this.bookSearchResponse.set(res);
     });
   }
 
@@ -117,7 +97,11 @@ export class BooksPage implements OnInit {
     this.genreService.getAllGenres().subscribe((res) => (this.genres = res));
   }
 
-  handleSortChange(): void {
+  handleSortChange($event:SelectChangeEvent): void {
+    this.filters = {
+      ...this.filters,
+      sort: $event.value
+    }
     this.loadBooks();
   }
 
@@ -159,12 +143,17 @@ export class BooksPage implements OnInit {
 
   resetFilters(): void {
     this.filters = {
-      authorId: null,
-      genreId: null,
-      title: null,
       sort: 'price,asc',
     };
+    this.loadBooks();
+  }
 
+  handleLoad($event: TableLazyLoadEvent) {
+    this.filters = {
+      ...this.filters,
+      page: ($event.first ?? 0) / ($event.rows ?? 0),
+      size: $event.rows ?? 0
+    }
     this.loadBooks();
   }
 }

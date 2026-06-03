@@ -1,1 +1,86 @@
-<p>shop works!</p>
+<div class="card">
+  <div class="search-section">
+    <input
+      pInputText
+      type="text"
+      placeholder="Search by title"
+      [(ngModel)]="filters.title"
+      (input)="loadBooks()"
+      class="w-full">
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+
+    <p-select
+      [options]="sortOptions"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Sort"
+      (onChange)="handleSortChange($event)">
+    </p-select>
+
+    <p-select
+      [options]="authors"
+      [(ngModel)]="filters.authorId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Author"
+      (onChange)="loadBooks()">
+    </p-select>
+
+    <p-select
+      [options]="genres"
+      [(ngModel)]="filters.genreId"
+      optionLabel="name"
+      optionValue="id"
+      placeholder="Genre"
+      (onChange)="loadBooks()">
+    </p-select>
+
+    <p-button
+      label="Reset"
+      icon="pi pi-filter-slash"
+      severity="secondary"
+      (onClick)="resetFilters()">
+    </p-button>
+
+  </div>
+
+  <p-dataview #dv [value]="bookSearchResponse().content"
+              [layout]="'grid'"
+              [rows]=bookSearchResponse().size
+              [paginator]="true"
+              [lazy]="true"
+              [totalRecords]="bookSearchResponse().totalElements"
+              (onLazyLoad)="handleLoad($event)">
+    <ng-template #grid let-items>
+      <div class="grid grid-cols-12">
+        @for (item of items; track $index) {
+          <div class="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-6 p-2">
+            <div class="h-[365px] w-[250px] p-3 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
+              <div class="bg-surface-50 flex justify-center rounded">
+                <div class="relative mx-auto">
+                  <img class="mx-auto rounded w-45 h-50" [src]="apiBaseUrl + item.imageName" [alt]="item.title" />
+                </div>
+              </div>
+              <div class="pt-2">
+                <div class="flex flex-row justify-between products-start gap-2">
+                  <div>
+                    <span class="font-normal text-surface-500 dark:text-surface-400 text-xs text-500">{{ item.authorName }}</span>
+                    <div class="text-sm font-medium mt-1 book-title">{{ item.title }}</div>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2 mt-auto">
+                  <span class="text-l font-semibold">{{ item.price | number:'1.2-2' }} {{'RSD'}}</span>
+                  <p-button icon="pi pi-shopping-cart" label="Buy Now" styleClass="w-full h-8"></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </ng-template>
+  </p-dataview>
+</div>
