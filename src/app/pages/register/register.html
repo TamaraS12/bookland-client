@@ -1,0 +1,43 @@
+<div class="register-container">
+  <div class="register-image"></div>
+
+  <div class="register-form">
+    <div class="form-wrapper">
+      <img
+        src="/login_icon.png"
+        width="150"
+        height="150"
+        alt="Login icon">
+
+      <h2>Register</h2>
+
+      <form [formGroup]="form">
+        <div class="field">
+          <input
+            id="username"
+            pInputText
+            formControlName="username"
+            placeholder="Enter username"
+            class="w-full">
+        </div>
+
+        <div class="field">
+          <input
+            id="password"
+            type="password"
+            pInputText
+            formControlName="password"
+            placeholder="Enter password"
+            class="w-full">
+        </div>
+
+        <p-button
+          label="Register"
+          styleClass="w-full"
+          [disabled]="form.invalid" (click)="handleRegister()">
+        </p-button>
+      </form>
+    </div>
+  </div>
+</div>
+

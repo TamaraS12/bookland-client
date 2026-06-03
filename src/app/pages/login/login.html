@@ -1,0 +1,48 @@
+<div class="login-container">
+  <div class="login-image"></div>
+
+  <div class="login-form">
+    <div class="form-wrapper">
+      <img
+        src="/login_icon.png"
+        width="150"
+        height="150"
+        alt="Login icon">
+
+      <h2>Login</h2>
+
+      <form [formGroup]="form">
+        <div class="field">
+          <input
+            id="username"
+            pInputText
+            formControlName="username"
+            placeholder="Enter username"
+            class="w-full">
+        </div>
+
+        <div class="field">
+          <input
+            id="password"
+            type="password"
+            pInputText
+            formControlName="password"
+            placeholder="Enter password"
+            class="w-full">
+        </div>
+
+        <p-button
+          label="Login"
+          styleClass="w-full"
+          [disabled]="form.invalid" (click)="handleLogin()">
+        </p-button>
+
+        <div class="register-link text-center mt-3">
+          <a routerLink="/register" class="text-primary font-medium">
+            Register
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
