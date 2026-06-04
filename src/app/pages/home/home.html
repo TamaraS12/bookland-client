@@ -1,23 +1,70 @@
-<header class="app-header">
-  <div class="left">
-    <span class="logo">BookLand</span>
-  </div>
+<mat-sidenav-container class="sidenav-container">
 
-  <div class="right">
+  <mat-sidenav #drawer mode="side" opened class="sidenav">
 
-    <p-overlaybadge [value]="cartSize()" badgeSize="small" (click)="handleViewCart()">
-      <i class="pi pi-shopping-cart" style="font-size: 1.5rem; cursor: pointer;"></i>
-    </p-overlaybadge>
-  </div>
-</header>
+    <div class="logo">
+      BookLand
+    </div>
 
-<div class="layout">
-  <aside class="sidebar">
-    <p-menu [model]="items"></p-menu>
-  </aside>
+    <div class="user-section">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <div class="username">{{ username }}</div>
+    </div>
 
-  <main class="content">
-    <router-outlet></router-outlet>
-  </main>
-</div>
+    <mat-nav-list>
 
+      @for (item of items; track $index) {
+        <a mat-list-item
+           [routerLink]="item.routerLink"
+           routerLinkActive="active-link"
+           class="nav-item">
+          <mat-icon>{{item.icon}}</mat-icon>
+          <span>{{item.label}}</span>
+        </a>
+      }
+
+      <a mat-list-item routerLink="/orders" routerLinkActive="active-link" class="nav-item">
+        <mat-icon>receipt_long</mat-icon>
+        <span>Orders</span>
+      </a>
+
+      <a mat-list-item (click)="logout()" class="nav-item">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <!-- TOP BAR -->
+    <mat-toolbar color="primary">
+
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="spacer"></span>
+
+      @if (userRole === UserRole.USER) {
+        <button mat-icon-button (click)="handleViewCart()">
+          <mat-icon
+            [matBadge]="cartSize()"
+            matBadgeSize="medium">
+            shopping_cart
+          </mat-icon>
+        </button>
+      }
+
+
+    </mat-toolbar>
+
+    <!-- PAGE CONTENT -->
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

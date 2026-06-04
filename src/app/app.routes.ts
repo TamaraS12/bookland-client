@@ -11,6 +11,7 @@ import { Register } from './pages/register/register';
 import { BookDetails } from './pages/book-details/book-details';
 import { Cart } from './pages/cart/cart';
 import { OrderForm } from './pages/order-form/order-form';
+import { Orders } from './pages/orders/orders';
 
 export const routes: Routes = [
   {
@@ -73,6 +74,11 @@ export const routes: Routes = [
       {
         path: 'orders/new',
         component: OrderForm,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'orders',
+        component: Orders,
         canActivate: [authGuard],
       },
     ],

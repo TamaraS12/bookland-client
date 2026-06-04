@@ -1,46 +1,48 @@
 <p-confirmdialog />
-<div class="genres-header">
-  <h2>Genres</h2>
+<div class="genres-container">
+  <div class="genres-header">
+    <h2 class="text-2xl">Genres</h2>
 
-  <p-button
-    label="Add Genre"
-    icon="pi pi-plus"
-    (click)="addGenre()">
-  </p-button>
+    <p-button
+      label="Add Genre"
+      icon="pi pi-plus"
+      (click)="addGenre()">
+    </p-button>
+  </div>
+
+  <div class="genres-grid">
+    @for (genre of genres(); track $index) {
+      <p-card class="genre-card">
+
+        <div class="genre-avatar">
+          <p-avatar
+            [label]="getInitials(genre.name)"
+            shape="circle"
+            size="large">
+          </p-avatar>
+        </div>
+
+        <div class="genre-name">
+          {{ genre.name }}
+        </div>
+
+        <div class="genre-actions">
+
+          <p-button
+            icon="pi pi-pencil"
+            (click)="editGenre(genre)">
+          </p-button>
+
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            (click)="deleteGenre(genre.id)">
+          </p-button>
+        </div>
+
+      </p-card>
+    }
+
+  </div>
+
 </div>
-
-<div class="genres-grid">
-  @for (genre of genres(); track $index) {
-    <p-card class="genre-card">
-
-      <div class="genre-avatar">
-        <p-avatar
-          [label]="getInitials(genre.name)"
-          shape="circle"
-          size="large">
-        </p-avatar>
-      </div>
-
-      <div class="genre-name">
-        {{ genre.name }}
-      </div>
-
-      <div class="genre-actions">
-
-        <p-button
-          icon="pi pi-pencil"
-          (click)="editGenre(genre)">
-        </p-button>
-
-        <p-button
-          icon="pi pi-trash"
-          severity="danger"
-          (click)="deleteGenre(genre.id)">
-        </p-button>
-      </div>
-
-    </p-card>
-  }
-
-</div>
-

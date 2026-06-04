@@ -8,13 +8,14 @@ import { DecimalPipe } from '@angular/common';
 import { Button } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-cart',
-  imports: [TableModule, DecimalPipe, Button, ConfirmDialogModule],
+  imports: [TableModule, DecimalPipe, Button, ConfirmDialogModule, Card],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
-  providers: [ConfirmationService]
+  providers: [ConfirmationService],
 })
 export class Cart {
   apiBaseUrl = IMAGE_URL;
@@ -51,7 +52,6 @@ export class Cart {
         });
       },
     });
-
   }
 
   handleOrder() {
@@ -77,6 +77,5 @@ export class Cart {
         this.cartService.resetCart();
       },
     });
-
   }
 }

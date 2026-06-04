@@ -1,7 +1,7 @@
 .book-form-container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem;
 }
 
 .form-header {
@@ -34,4 +34,5 @@
   margin-top: 2rem;
   display: flex;
   gap: 1rem;
+  justify-content: flex-end;
 }

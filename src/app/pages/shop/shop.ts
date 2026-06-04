@@ -15,10 +15,11 @@ import { InputText } from 'primeng/inputtext';
 import { Select, SelectChangeEvent } from 'primeng/select';
 import { Book } from '../../model/book.model';
 import { Router } from '@angular/router';
+import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-shop',
-  imports: [DataView, FormsModule, Button, DecimalPipe, InputText, Select],
+  imports: [DataView, FormsModule, Button, DecimalPipe, InputText, Select, Card],
   templateUrl: './shop.html',
   styleUrl: './shop.css',
 })
@@ -29,10 +30,10 @@ export class Shop implements OnInit {
     content: [],
     page: 0,
     size: 0,
-    totalElements: 0
+    totalElements: 0,
   });
-  authors: Author[] = [];
-  genres: Genre[] = [];
+  authors = signal<Author[]>([]);
+  genres = signal<Genre[]>([]);
 
   filters: BookSearchRequest = {
     sort: 'price,asc',
@@ -54,7 +55,7 @@ export class Shop implements OnInit {
   private bookService = inject(BookService);
   private authorService = inject(AuthorService);
   private genreService = inject(GenreService);
-  private router= inject(Router);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadAuthors();
@@ -69,11 +70,11 @@ export class Shop implements OnInit {
   }
 
   loadAuthors(): void {
-    this.authorService.getAllAuthors().subscribe((res) => (this.authors = res));
+    this.authorService.getAllAuthors().subscribe((res) => this.authors.set(res));
   }
 
   loadGenres(): void {
-    this.genreService.getAllGenres().subscribe((res) => (this.genres = res));
+    this.genreService.getAllGenres().subscribe((res) => this.genres.set(res));
   }
 
   handleSortChange($event: SelectChangeEvent): void {
@@ -103,6 +104,5 @@ export class Shop implements OnInit {
 
   handleBookDetails(book: Book) {
     this.router.navigate(['shop', book.id]);
-
   }
 }

@@ -15,11 +15,13 @@ import { Router } from '@angular/router';
 
 import { AuthorService } from '../../services/author-service';
 import { GenreService } from '../../services/genre-service';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { FileUpload } from 'primeng/fileupload';
 import { IMAGE_URL } from '../../constants/image.constants';
+import { Card } from 'primeng/card';
+import { Author } from '../../model/author.model';
+import { Genre } from '../../model/genre.model';
 
 
 @Component({
@@ -38,6 +40,7 @@ import { IMAGE_URL } from '../../constants/image.constants';
     ReactiveFormsModule,
     ToastModule,
     FileUpload,
+    Card,
   ],
 })
 export class BookForm implements OnInit {
@@ -65,11 +68,12 @@ export class BookForm implements OnInit {
   selectedFile: File | null = null;
   imagePreview = signal<string | null>(null);
 
-  authors = toSignal(this.authorService.getAllAuthors(), { initialValue: [] });
-
-  genres = toSignal(this.genreService.getAllGenres(), { initialValue: [] });
+  authors = signal<Author[]>([]);
+  genres = signal<Genre[]>([]);
 
   ngOnInit(): void {
+    this.loadAuthors();
+    this.loadGenres();
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
@@ -87,6 +91,14 @@ export class BookForm implements OnInit {
 
       this.imagePreview.set(this.apiBaseUrl + this.book.imageName);
     });
+  }
+
+  loadAuthors(): void {
+    this.authorService.getAllAuthors().subscribe((res) => this.authors.set(res));
+  }
+
+  loadGenres(): void {
+    this.genreService.getAllGenres().subscribe((res) => this.genres.set(res));
   }
 
   save(): void {
@@ -143,12 +155,7 @@ export class BookForm implements OnInit {
     };
     const formData = new FormData();
 
-    formData.append(
-      'book',
-      new Blob(
-        [JSON.stringify(updatedBook)],
-        { type: 'application/json' }),
-    );
+    formData.append('book', new Blob([JSON.stringify(updatedBook)], { type: 'application/json' }));
 
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);

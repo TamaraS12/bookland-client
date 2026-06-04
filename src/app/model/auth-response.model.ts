@@ -1,6 +1,7 @@
 export interface AuthResponse {
   token: string;
   role: UserRole;
+  username: string;
 }
 
 export enum UserRole {

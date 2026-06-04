@@ -13,7 +13,11 @@ export class OrderService {
     return this.http.post<Order>(this.apiUrl, order);
   }
 
-  getAll() {
+  getAllByUser() {
     return this.http.get<Order[]>(this.apiUrl);
+  }
+
+  getAll() {
+    return this.http.get<Order[]>(this.apiUrl + '/admin');
   }
 }

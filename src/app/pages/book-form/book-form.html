@@ -1,115 +1,115 @@
 <div class="book-form-container">
-
-  <div class="form-header">
-    <h2>
-      {{ isEditMode ? 'Edit Book' : 'Add Book' }}
-    </h2>
-  </div>
-
-  <div class="form-grid" [formGroup]="form">
-
-    <!-- Title -->
-    <div class="field">
-      <label for="title">Title</label>
-
-      <input
-        id="title"
-        pInputText
-        formControlName="title"
-        class="w-full">
+  <p-card>
+    <div class="form-header">
+      <h2 class="text-2xl">
+        {{ isEditMode ? 'Edit Book' : 'Add Book' }}
+      </h2>
     </div>
 
-    <!-- Author -->
-    <div class="field">
-      <label>Author</label>
+    <div class="form-grid" [formGroup]="form">
 
-      <p-select
-        [options]="authors()"
-        optionLabel="name"
-        optionValue="id"
-        formControlName="authorId"
-        placeholder="Select author">
-      </p-select>
-    </div>
+      <!-- Title -->
+      <div class="field">
+        <label for="title">Title</label>
 
-    <!-- Genres -->
-    <div class="field">
-      <label>Genres</label>
-
-      <p-multiselect
-        [options]="genres()"
-        optionLabel="name"
-        optionValue="id"
-        formControlName="genreIds"
-        placeholder="Select genres"
-        display="chip">
-      </p-multiselect>
-    </div>
-
-    <!-- Price -->
-    <div class="field">
-      <label>Price (RSD)</label>
-
-      <p-inputNumber
-        formControlName="price"
-        mode="decimal"
-        [min]="0">
-      </p-inputNumber>
-    </div>
-
-    <!-- Image -->
-    <div class="field field-full">
-      <p-fileupload
-        mode="basic"
-        chooseLabel="Choose Image"
-        accept="image/*"
-        [auto]="false"
-        [customUpload]="true"
-        (onSelect)="onFileSelect($event)">
-      </p-fileupload>
-    </div>
-
-    <!-- Preview -->
-    @if (imagePreview()) {
-      <div class="field field-full">
-        <img
-          [src]="imagePreview()"
-          alt="Book image"
-          height="180"
-          width="120"
-          class="preview-image">
+        <input
+          id="title"
+          pInputText
+          formControlName="title"
+          class="w-full">
       </div>
-    }
 
-    <!-- Description -->
-    <div class="field field-full">
-      <label>Description</label>
+      <!-- Author -->
+      <div class="field">
+        <label>Author</label>
 
-      <textarea
-        pTextarea
-        rows="6"
-        formControlName="description"
-        class="w-full">
+        <p-select
+          [options]="authors()"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="authorId"
+          placeholder="Select author">
+        </p-select>
+      </div>
+
+      <!-- Genres -->
+      <div class="field">
+        <label>Genres</label>
+
+        <p-multiselect
+          [options]="genres()"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="genreIds"
+          placeholder="Select genres"
+          display="chip">
+        </p-multiselect>
+      </div>
+
+      <!-- Price -->
+      <div class="field">
+        <label>Price (RSD)</label>
+
+        <p-inputNumber
+          formControlName="price"
+          mode="decimal"
+          [min]="0">
+        </p-inputNumber>
+      </div>
+
+      <!-- Image -->
+      <div class="field field-full">
+        <p-fileupload
+          mode="basic"
+          chooseLabel="Choose Image"
+          accept="image/*"
+          [auto]="false"
+          [customUpload]="true"
+          (onSelect)="onFileSelect($event)">
+        </p-fileupload>
+      </div>
+
+      <!-- Preview -->
+      @if (imagePreview()) {
+        <div class="field field-full">
+          <img
+            [src]="imagePreview()"
+            alt="Book image"
+            height="180"
+            width="120"
+            class="preview-image">
+        </div>
+      }
+
+      <!-- Description -->
+      <div class="field field-full">
+        <label>Description</label>
+
+        <textarea
+          pTextarea
+          rows="6"
+          formControlName="description"
+          class="w-full">
       </textarea>
+      </div>
+
     </div>
 
-  </div>
+    <div class="form-actions">
 
-  <div class="form-actions">
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        severity="secondary"
+        (onClick)="cancel()">
+      </p-button>
 
-    <p-button
-      label="Save"
-      icon="pi pi-save"
-      (onClick)="save()">
-    </p-button>
+      <p-button
+        label="Save"
+        icon="pi pi-save"
+        (onClick)="save()">
+      </p-button>
 
-    <p-button
-      label="Cancel"
-      icon="pi pi-times"
-      severity="secondary"
-      (onClick)="cancel()">
-    </p-button>
-
-  </div>
-
+    </div>
+  </p-card>
 </div>

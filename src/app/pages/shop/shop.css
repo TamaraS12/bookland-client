@@ -5,8 +5,7 @@
   overflow: hidden;
   min-height: 2.0rem;
 }
-
-.card {
+.shop-container {
   padding: 20px;
   max-width: 1100px;
   margin: 0 auto;
@@ -22,4 +21,19 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 25px;
+}
+
+.shop-card {
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.book-cards-container {
+  margin-left: -0.1rem;
 }

@@ -20,6 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { IMAGE_URL } from '../../constants/image.constants';
 import { BookSearchResponse } from '../../model/book-search-response.model';
+import { Card } from 'primeng/card';
 
 @Component({
   selector: 'app-books',
@@ -37,6 +38,7 @@ import { BookSearchResponse } from '../../model/book-search-response.model';
     ButtonModule,
     BadgeModule,
     ConfirmDialogModule,
+    Card,
   ],
 })
 export class BooksPage implements OnInit {
@@ -48,8 +50,8 @@ export class BooksPage implements OnInit {
     size: 8,
     totalElements: 0,
   });
-  authors: Author[] = [];
-  genres: Genre[] = [];
+  authors = signal<Author[]>([]);
+  genres = signal<Genre[]>([]);
 
   filters: BookSearchRequest = {
     page: 0,
@@ -88,18 +90,18 @@ export class BooksPage implements OnInit {
   }
 
   loadAuthors(): void {
-    this.authorService.getAllAuthors().subscribe((res) => (this.authors = res));
+    this.authorService.getAllAuthors().subscribe((res) => this.authors.set(res));
   }
 
   loadGenres(): void {
-    this.genreService.getAllGenres().subscribe((res) => (this.genres = res));
+    this.genreService.getAllGenres().subscribe((res) => this.genres.set(res));
   }
 
-  handleSortChange($event:SelectChangeEvent): void {
+  handleSortChange($event: SelectChangeEvent): void {
     this.filters = {
       ...this.filters,
-      sort: $event.value
-    }
+      sort: $event.value,
+    };
     this.loadBooks();
   }
 
@@ -150,8 +152,8 @@ export class BooksPage implements OnInit {
     this.filters = {
       ...this.filters,
       page: ($event.first ?? 0) / ($event.rows ?? 0),
-      size: $event.rows ?? 0
-    }
+      size: $event.rows ?? 0,
+    };
     this.loadBooks();
   }
 }
