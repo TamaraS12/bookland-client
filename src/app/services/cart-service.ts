@@ -30,24 +30,6 @@ export class CartService {
     });
   }
 
-  getCartItem(id: number){
-    return this.cart().items.find(item => item.id == id);
-  }
-
-  updateCartItem(cartItem: CartItem) {
-    this.cart.update(cart => {
-      const items = cart.items.filter(item => item.id !== cartItem.id);
-
-      let totalAmount = 0;
-      items.forEach(item => totalAmount += item.amount);
-
-      return {
-        items: [...items, cartItem],
-        totalAmount: totalAmount + cartItem.amount
-      }
-    });
-  }
-
   resetCart(): void {
     this.cart.set({
       items: [],

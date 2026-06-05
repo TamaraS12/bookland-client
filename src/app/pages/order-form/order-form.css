@@ -48,7 +48,6 @@
   justify-content: flex-end;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;

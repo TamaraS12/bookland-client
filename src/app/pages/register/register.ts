@@ -32,6 +32,7 @@ export class Register {
       this.authService.register(request).subscribe(res => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('role', res.role);
+        localStorage.setItem('username', res.role);
         if (res.role === UserRole.ADMIN) {
           this.router.navigate(['books']);
         } else {
